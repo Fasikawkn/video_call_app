@@ -24,6 +24,11 @@ class AuthenticationSuccess extends AuthenticationState {
   List<Object> get props => [user!];
 }
 
+class AuthenticationLoggedOut extends AuthenticationState{
+  @override
+  List<Object> get props => [];
+}
+
 class AuthenticationFailure extends AuthenticationState {
   final String? errorMessage;
   const AuthenticationFailure({this.errorMessage});

@@ -55,7 +55,6 @@ class UserModel {
     data['picture'] = picture;
     data['email'] = email;
     data['password'] = password;
-    data['isVerified'] = isVerified;
     return data;
   }
 }

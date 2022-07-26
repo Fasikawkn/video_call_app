@@ -17,12 +17,28 @@ class EmailChanged extends FormEvent {
   List<Object> get props => [email];
 }
 
+class ProfilePictureChanged extends FormEvent {
+  final String profilePicture;
+  const ProfilePictureChanged(this.profilePicture);
+
+  @override
+  List<Object> get props => [profilePicture];
+}
+
 class PasswordChanged extends FormEvent {
   final String password;
   const PasswordChanged(this.password);
 
   @override
   List<Object> get props => [password];
+}
+
+class ConfirmPasswordChanged extends FormEvent {
+  final String confirmPassword;
+  const ConfirmPasswordChanged(this.confirmPassword);
+
+  @override
+  List<Object> get props => [confirmPassword];
 }
 
 class NameChanged extends FormEvent {

@@ -25,6 +25,7 @@ class SignIn extends StatelessWidget {
                     ErrorDialog(errorMessage: state.errorMessage),
               );
             } else if (state.isFormValid && state.isLoading) {
+              debugPrint('+++++++++++++++++++++++++++++++++++> Authenticating');
               context.read<AuthenticationBloc>().add(AuthenticateStarted());
               context.read<FormBloc>().add(const FormSucceeded());
             } else if (state.isFormValidateFailed) {
@@ -38,7 +39,9 @@ class SignIn extends StatelessWidget {
           if (state is AuthenticationSuccess) {
             Navigator.of(context).pushAndRemoveUntil(
                 MaterialPageRoute(
-                  builder: (context) => const HomePage(),
+                  builder: (context) =>  HomePage(
+                    loggedInUser: state.user!,
+                  ),
                 ),
                 (Route<dynamic> route) => false);
           }
@@ -117,13 +120,10 @@ class SignIn extends StatelessWidget {
                             (route) => false);
                       })
               ])),
-              
             ],
           ),
         ),
       ),
     );
   }
-
-  
 }

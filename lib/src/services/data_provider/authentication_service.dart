@@ -7,12 +7,15 @@ class AuthenticationDataProvider {
   // retrieve the current user
   Stream<UserModel> getCurrentUser() {
     return _auth.authStateChanges().map((user) {
+      user?.reload();
+      print('The user is +++++++++++++++++++++++++++++++++++$user');
       if (user != null) {
         return UserModel(
-            uid: user.uid,
-            name: user.displayName,
-            email: user.email,
-            picture: user.photoURL);
+          uid: user.uid,
+          name: user.displayName,
+          email: user.email,
+          picture: user.photoURL,
+        );
       } else {
         return UserModel(uid: 'uid');
       }
@@ -20,7 +23,6 @@ class AuthenticationDataProvider {
   }
 
   // Signup with credential
-
   Future<UserCredential?> signUp(UserModel user) async {
     try {
       UserCredential _userCredential =
@@ -38,32 +40,32 @@ class AuthenticationDataProvider {
     try {
       UserCredential _userCredential = await _auth.signInWithEmailAndPassword(
           email: user.email!, password: user.password!);
-          
-          return _userCredential;
+
+      return _userCredential;
     } on FirebaseAuthException catch (e) {
       throw FirebaseAuthException(code: e.code, message: e.message);
     }
   }
 
+
+
   // Verify email address
-  Future _verifyEmail() async{
+  Future _verifyEmail() async {
     try {
-      User? _user =  _auth.currentUser;
-      if(_user != null && !_user.emailVerified){
+      User? _user = _auth.currentUser;
+      if (_user != null && !_user.emailVerified) {
         return await _user.sendEmailVerification();
       }
-      
     } on FirebaseAuthException catch (e) {
       throw FirebaseAuthException(code: e.code, message: e.message);
     }
   }
 
   // Signout from the app
-  Future signOut() async{
+  Future signOut() async {
     try {
       return await _auth.signOut();
-      
-    }on FirebaseAuthException catch (e) {
+    } on FirebaseAuthException catch (e) {
       throw FirebaseAuthException(code: e.code, message: e.message);
     }
   }

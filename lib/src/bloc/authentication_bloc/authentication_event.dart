@@ -14,10 +14,21 @@ class AuthenticateStarted extends AuthenticationEvent{
   List<Object> get props => [];
 }
 
+
 class AuthenticateSignOut extends AuthenticationEvent{
 
 
   @override
   List<Object> get props => [];
 
+}
+
+
+
+class AuthUserChange extends AuthenticationEvent{
+  final UserModel userModel;
+  const AuthUserChange(this.userModel);
+
+  @override
+  List<Object> get props => [userModel];
 }

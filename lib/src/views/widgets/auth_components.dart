@@ -39,10 +39,17 @@ class EmailField extends StatelessWidget {
   }
 }
 
-class PasswordField extends StatelessWidget {
+class PasswordField extends StatefulWidget {
   const PasswordField({required this.formFor, Key? key}) : super(key: key);
   final Status formFor;
 
+  @override
+  State<PasswordField> createState() => _PasswordFieldState();
+}
+
+class _PasswordFieldState extends State<PasswordField> {
+
+  bool _isObscured = true;
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -54,17 +61,22 @@ class PasswordField extends StatelessWidget {
             onChanged: ((value) {
               context.read<FormBloc>().add(PasswordChanged(value));
             }),
-            keyboardType: TextInputType.emailAddress,
+            keyboardType: TextInputType.visiblePassword,
+            obscureText: _isObscured,
             decoration: InputDecoration(
                 suffixIcon: IconButton(
-                  icon: const Icon(Icons.visibility),
-                  onPressed: () {},
+                  icon: Icon(_isObscured? Icons.visibility: Icons.visibility_off),
+                  onPressed: () {
+                    setState(() {
+                      _isObscured = !_isObscured;
+                    });
+                  },
                 ),
                 labelText: 'Password',
-                helperText: formFor == Status.signUp
+                helperText: widget.formFor == Status.signUp
                     ? 'Password should be at least 8 characters with at least one letter, number and special character'
                     : null,
-                errorText: formFor == Status.signUp
+                errorText: widget.formFor == Status.signUp
                     ? !state.isPasswordValid
                         ? 'Password must be at least 8 characters and contain at least one letter and number'
                         : null
@@ -74,6 +86,55 @@ class PasswordField extends StatelessWidget {
                 helperMaxLines: 2,
                 contentPadding: const EdgeInsets.symmetric(
                     vertical: 15.0, horizontal: 10.0),
+                border: border),
+          ),
+        );
+      },
+    );
+  }
+}
+
+class ConfirmPassword extends StatefulWidget {
+  const ConfirmPassword({Key? key}) : super(key: key);
+
+  @override
+  State<ConfirmPassword> createState() => _ConfirmPasswordState();
+}
+
+class _ConfirmPasswordState extends State<ConfirmPassword> {
+  bool _isObscured = true;
+  @override
+  Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
+    return BlocBuilder<FormBloc, FormsValidate>(
+      builder: (context, state) {
+        return SizedBox(
+          width: size.width * 0.8,
+          child: TextFormField(
+            onChanged: ((value) {
+              context.read<FormBloc>().add(ConfirmPasswordChanged(value));
+            }),
+            keyboardType: TextInputType.visiblePassword,
+            obscureText: _isObscured,
+            decoration: InputDecoration(
+                suffixIcon: IconButton(
+                  icon:  Icon(_isObscured? Icons.visibility: Icons.visibility_off),
+                  onPressed: () {
+                    setState(() {
+                      _isObscured = !_isObscured;
+                    });
+                  },
+                ),
+                labelText: 'Confirm Password',
+                errorText:
+                    !state.isConfirmPasswordValid ? 'Password do not match!' : null,
+                hintText: 'Confirm Password',
+                errorMaxLines: 2,
+                helperMaxLines: 2,
+                contentPadding: const EdgeInsets.symmetric(
+                  vertical: 15.0,
+                  horizontal: 10.0,
+                ),
                 border: border),
           ),
         );
